@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NexCore — Nota Fiscal</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- ══════════ FORMULÁRIO ══════════ -->
+  <section class="form-area">
+
+    <div class="form-brand">
+      <span class="brand-name">Nex<span>Core</span></span>
+      <span class="brand-sub">Gerador de Nota Fiscal</span>
+    </div>
+
+    <div class="form-grid">
+
+      <!-- Bloco: Emitente -->
+      <div class="form-block">
+        <div class="block-title">
+          <span class="block-num">01</span> Emitente
+        </div>
+        <label class="f-label">Razão Social
+          <input class="f-input" id="c1" type="text" placeholder="Ex: NexCore Technologies Ltda."/>
+        </label>
+        <label class="f-label">CNPJ
+          <input class="f-input" id="c2" type="text" placeholder="Ex: 34.821.056/0001-92"
+                 oninput="mascara(this,'cnpj')"/>
+        </label>
+        <label class="f-label">Endereço
+          <input class="f-input" id="c3" type="text" placeholder="Ex: Av. Faria Lima, 4100 — SP"/>
+        </label>
+        <label class="f-label">Inscrição Estadual
+          <input class="f-input" id="c4" type="text" placeholder="Ex: 123.456.789.000"/>
+        </label>
+      </div>
+
+      <!-- Bloco: Destinatário -->
+      <div class="form-block">
+        <div class="block-title">
+          <span class="block-num">02</span> Destinatário
+        </div>
+        <label class="f-label">Nome / Empresa
+          <input class="f-input" id="c5" type="text" placeholder="Ex: DataForge Distribuidora S.A."/>
+        </label>
+        <label class="f-label">CPF / CNPJ
+          <input class="f-input" id="c6" type="text" placeholder="Ex: 12.304.887/0001-44"/>
+        </label>
+        <label class="f-label">Endereço de Entrega
+          <input class="f-input" id="c7" type="text" placeholder="Ex: Rua Augusta, 2107 — SP"/>
+        </label>
+        <label class="f-label">Telefone / Email
+          <input class="f-input" id="c8" type="text" placeholder="Ex: (11) 99999-0000"/>
+        </label>
+      </div>
+
+      <!-- Bloco: Nota -->
+      <div class="form-block">
+        <div class="block-title">
+          <span class="block-num">03</span> Dados da Nota
+        </div>
+        <label class="f-label">Número da NF
+          <input class="f-input" id="c9" type="text" placeholder="Ex: NF-2025-00847"/>
+        </label>
+        <label class="f-label">Data de Emissão
+          <input class="f-input" id="c10" type="date"/>
+        </label>
+        <label class="f-label">Forma de Pagamento
+          <select class="f-input" id="c11">
+            <option value="Boleto Bancário">Boleto Bancário</option>
+            <option value="Pix">Pix</option>
+            <option value="Cartão de Crédito">Cartão de Crédito</option>
+            <option value="Transferência Bancária">Transferência Bancária</option>
+            <option value="Dinheiro">Dinheiro</option>
+          </select>
+        </label>
+        <label class="f-label">Prazo de Pagamento
+          <input class="f-input" id="c12" type="text" placeholder="Ex: 30/60 dias"/>
+        </label>
+      </div>
+
+      <!-- Bloco: Produto -->
+      <div class="form-block">
+        <div class="block-title">
+          <span class="block-num">04</span> Produto / Serviço
+        </div>
+        <label class="f-label">Descrição do Item
+          <input class="f-input" id="c13" type="text" placeholder="Ex: Servidor Dell PowerEdge R750"/>
+        </label>
+        <label class="f-label">Quantidade
+          <input class="f-input" id="c14" type="number" min="1" placeholder="Ex: 2" oninput="calcTotal()"/>
+        </label>
+        <label class="f-label">Valor Unitário (R$)
+          <input class="f-input" id="c15" type="number" min="0" step="0.01" placeholder="Ex: 38490.00" oninput="calcTotal()"/>
+        </label>
+        <label class="f-label">Valor Total
+          <input class="f-input" id="c16" type="text" readonly placeholder="Calculado automaticamente" style="opacity:.6;cursor:not-allowed"/>
+        </label>
+      </div>
+
+      <!-- Bloco: Observações (full width) -->
+      <div class="form-block full">
+        <div class="block-title">
+          <span class="block-num">05</span> Observações
+        </div>
+        <label class="f-label">Informações adicionais
+          <textarea class="f-input f-textarea" id="c17" placeholder="Ex: Mercadoria sujeita a conferência. Entrega somente em dias úteis."></textarea>
+        </label>
+      </div>
+
+    </div><!-- /form-grid -->
+
+    <!-- BOTÕES -->
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="gerar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Visualizar
+      </button>
+      <button class="btn btn-outline" onclick="gerar(false, true)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Imprimir
+      </button>
+      <button class="btn btn-primary" onclick="gerar(true)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/></svg>
+        Gerar PDF
+      </button>
+    </div>
+
+  </section>
+
+  <!-- ══════════ NOTA FISCAL (oculta até gerar) ══════════ -->
+  <div id="relatorio">
+    <div class="nf-watermark">NEXCORE</div>
+
+    <!-- Cabeçalho -->
+    <div class="nf-header">
+      <div class="nf-logo-block">
+        <div class="nf-logo">Nex<span>Core</span></div>
+        <div class="nf-logo-sub">Technologies &amp; Infrastructure Solutions</div>
+        <div class="nf-logo-addr" id="r3"></div>
+        <div class="nf-logo-addr">IE: <span id="r4"></span></div>
+      </div>
+      <div class="nf-title-block">
+        <div class="nf-doc-label">NOTA FISCAL</div>
+        <div class="nf-doc-num" id="r9"></div>
+        <div class="nf-doc-date">Emissão: <span id="r10"></span></div>
+      </div>
+    </div>
+
+    <!-- Emitente / Destinatário -->
+    <div class="nf-parties">
+      <div class="nf-party">
+        <div class="nf-party-role">Emitente</div>
+        <div class="nf-party-name" id="r1"></div>
+        <div class="nf-party-info">CNPJ: <span id="r2"></span></div>
+      </div>
+      <div class="nf-party">
+        <div class="nf-party-role">Destinatário</div>
+        <div class="nf-party-name" id="r5"></div>
+        <div class="nf-party-info">CPF/CNPJ: <span id="r6"></span></div>
+        <div class="nf-party-info"><span id="r7"></span></div>
+        <div class="nf-party-info"><span id="r8"></span></div>
+      </div>
+    </div>
+
+    <!-- Tabela de itens -->
+    <div class="nf-sec-head">
+      <span class="nf-sec-num">01</span>
+      <span class="nf-sec-title">Itens / Produtos</span>
+    </div>
+    <table class="nf-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Descrição do Produto / Serviço</th>
+          <th class="r">Qtd.</th>
+          <th class="r">Vl. Unitário</th>
+          <th class="r">Vl. Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="mono muted">001</td>
+          <td id="r13"></td>
+          <td class="r mono" id="r14"></td>
+          <td class="r mono" id="r15"></td>
+          <td class="r mono bold" id="r16"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Total box -->
+    <div class="nf-totals">
+      <div class="nf-total-line">
+        <span class="ntl-label">Subtotal</span>
+        <span class="ntl-val mono" id="rSub"></span>
+      </div>
+      <div class="nf-total-line">
+        <span class="ntl-label">Forma de Pagamento</span>
+        <span class="ntl-val mono" id="r11"></span>
+      </div>
+      <div class="nf-total-line">
+        <span class="ntl-label">Prazo</span>
+        <span class="ntl-val mono" id="r12"></span>
+      </div>
+      <div class="nf-total-line grand">
+        <span class="ntl-label">TOTAL GERAL</span>
+        <span class="ntl-val mono" id="rGrand"></span>
+      </div>
+    </div>
+
+    <!-- Observações -->
+    <div class="nf-sec-head" style="margin-top:24px">
+      <span class="nf-sec-num">02</span>
+      <span class="nf-sec-title">Observações</span>
+    </div>
+    <div class="nf-obs">
+      <div class="nf-obs-text" id="r17"></div>
+      <div class="nf-obs-note">⚠ Documento emitido eletronicamente. Sujeito à legislação fiscal vigente.</div>
+    </div>
+
+    <!-- Assinaturas -->
+    <div class="nf-sec-head" style="margin-top:24px">
+      <span class="nf-sec-num">03</span>
+      <span class="nf-sec-title">Assinaturas</span>
+    </div>
+    <div class="nf-sigs">
+      <div class="nf-sig">
+        <svg width="120" height="36" viewBox="0 0 120 36">
+          <path d="M6 26 C18 8,34 28,50 16 S76 6,90 20 S110 28,116 20" fill="none" stroke="#0a0a0f" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <div class="nf-sig-line"></div>
+        <div class="nf-sig-label">Emitente / Responsável</div>
+      </div>
+      <div class="nf-sig">
+        <svg width="120" height="36" viewBox="0 0 120 36">
+          <path d="M4 22 C24 4,42 34,64 14 S94 30,116 14" fill="none" stroke="#0a0a0f" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <div class="nf-sig-line"></div>
+        <div class="nf-sig-label">Destinatário / Recebedor</div>
+      </div>
+      <div class="nf-sig">
+        <div style="height:36px"></div>
+        <div class="nf-sig-line"></div>
+        <div class="nf-sig-label">Transportadora (se aplicável)</div>
+      </div>
+    </div>
+
+    <!-- Rodapé -->
+    <div class="nf-footer">
+      <span id="fLeft">NexCore Technologies Ltda.</span>
+      <span id="fRight"></span>
+    </div>
+
+  </div><!-- /relatorio -->
+
+  <script src="script.js"></script>
+</body>
+</html>

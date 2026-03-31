@@ -1,0 +1,452 @@
+/* ══════════════════════════════════════════
+   NexCore NF — style.css
+══════════════════════════════════════════ */
+
+:root {
+  --ink:     #0a0a0f;
+  --paper:   #f5f3ee;
+  --cream:   #edeae2;
+  --rule:    #d0cdc4;
+  --muted:   #7a7870;
+  --accent:  #c8ff00;
+  --red:     #e63030;
+
+  --bg:      #0d0d10;
+  --panel:   #111115;
+  --border:  #222228;
+  --txt:     #c8c5bf;
+  --dim:     #55535a;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 20px 80px;
+  color: var(--txt);
+}
+
+/* ─────────────────────────────────────────
+   FORMULÁRIO
+───────────────────────────────────────── */
+.form-area {
+  width: 100%;
+  max-width: 860px;
+}
+
+.form-brand {
+  margin-bottom: 32px;
+}
+.brand-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  color: #fff;
+  letter-spacing: 0.04em;
+  display: block;
+  line-height: 1;
+}
+.brand-name span { color: var(--accent); }
+.brand-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--dim);
+  display: block;
+  margin-top: 4px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.form-block {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.form-block.full { grid-column: 1 / -1; }
+
+.block-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.block-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+}
+
+.f-label {
+  display: flex;
+  flex-direction: column;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  gap: 5px;
+}
+
+.f-input {
+  background: #0e0e14;
+  border: 1px solid var(--border);
+  color: var(--txt);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+  border-radius: 0;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.f-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(200,255,0,0.08);
+}
+.f-input option { background: #0e0e14; }
+
+.f-textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.6;
+}
+
+/* ── BOTÕES ── */
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: 500;
+}
+.btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--ink);
+}
+.btn-primary:hover { background: #d8ff30; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(200,255,0,0.3); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--txt);
+  border: 1px solid var(--border);
+}
+.btn-outline:hover { border-color: var(--txt); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--dim);
+  border: 1px solid transparent;
+}
+.btn-ghost:hover { color: var(--txt); border-color: var(--border); }
+
+/* ─────────────────────────────────────────
+   NOTA FISCAL (oculta por padrão)
+───────────────────────────────────────── */
+#relatorio {
+  visibility: hidden;
+  position: absolute;
+  left: -9999px;
+
+  width: 860px;
+  background: var(--paper);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--ink);
+  position: relative;
+  overflow: hidden;
+
+  /* será sobrescrito pelo JS quando visível */
+}
+
+#relatorio.visivel {
+  visibility: visible;
+  position: static;
+  margin-top: 48px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.65);
+}
+
+/* Marca d'água */
+.nf-watermark {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%) rotate(-35deg);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 150px;
+  color: rgba(0,0,0,0.03);
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+/* ── HEADER DA NF ── */
+.nf-header {
+  background: var(--ink);
+  padding: 32px 44px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  z-index: 1;
+}
+.nf-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 4px;
+  background: var(--accent);
+}
+
+.nf-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  color: #fff;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.nf-logo span { color: var(--accent); }
+.nf-logo-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+.nf-logo-addr {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.22);
+  letter-spacing: 0.06em;
+  margin-top: 6px;
+}
+
+.nf-title-block { text-align: right; }
+.nf-doc-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.nf-doc-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 34px;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  line-height: 1.1;
+  margin-top: 2px;
+}
+.nf-doc-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  margin-top: 4px;
+}
+
+/* ── PARTES ── */
+.nf-parties {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--rule);
+  position: relative; z-index: 1;
+}
+.nf-party {
+  padding: 18px 22px;
+}
+.nf-party:first-child { border-right: 1px solid var(--rule); }
+.nf-party-role {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.nf-party-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.nf-party-info { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); line-height: 1.7; }
+
+/* ── SEÇÃO ── */
+.nf-sec-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 22px;
+  margin: 20px 0 12px;
+  position: relative; z-index: 1;
+}
+.nf-sec-head::after {
+  content: ''; flex: 1; height: 1px; background: var(--rule);
+}
+.nf-sec-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; color: var(--muted); letter-spacing: 0.12em;
+}
+.nf-sec-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── TABELA ── */
+.nf-table {
+  width: calc(100% - 44px);
+  margin: 0 22px;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  position: relative; z-index: 1;
+}
+.nf-table thead tr { background: var(--ink); }
+.nf-table thead th {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  padding: 9px 11px; text-align: left; font-weight: 400;
+}
+.nf-table thead th.r { text-align: right; }
+.nf-table tbody tr { border-bottom: 1px solid var(--rule); }
+.nf-table tbody tr:nth-child(even) { background: var(--cream); }
+.nf-table tbody td { padding: 11px 11px; vertical-align: middle; }
+.nf-table tbody td.r { text-align: right; }
+
+.mono { font-family: 'DM Mono', monospace; font-size: 12px; }
+.muted { color: var(--muted); }
+.bold { font-weight: 600; }
+
+/* ── TOTAIS ── */
+.nf-totals {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 10px 22px 0;
+  position: relative; z-index: 1;
+}
+.nf-total-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 320px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--rule);
+}
+.nf-total-line:last-child { border-bottom: none; }
+.ntl-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.12em;
+  color: var(--muted); text-transform: uppercase;
+}
+.ntl-val { font-family: 'DM Mono', monospace; font-size: 13px; }
+
+.nf-total-line.grand { background: var(--ink); margin-top: 4px; }
+.nf-total-line.grand .ntl-label { color: rgba(255,255,255,0.45); }
+.nf-total-line.grand .ntl-val { color: var(--accent); font-size: 16px; }
+
+/* ── OBSERVAÇÕES ── */
+.nf-obs {
+  margin: 0 22px;
+  border: 1px solid var(--rule);
+  padding: 14px 16px;
+  position: relative; z-index: 1;
+}
+.nf-obs-text {
+  font-size: 12px; color: var(--muted); line-height: 1.75;
+  white-space: pre-wrap;
+  min-height: 32px;
+}
+.nf-obs-note {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; color: var(--muted);
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px dashed var(--rule);
+  letter-spacing: 0.06em;
+}
+
+/* ── ASSINATURAS ── */
+.nf-sigs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+  padding: 0 22px;
+  position: relative; z-index: 1;
+}
+.nf-sig { padding-top: 4px; }
+.nf-sig-line {
+  height: 1px; background: var(--rule);
+  margin: 20px 0 8px;
+}
+.nf-sig-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; color: var(--muted);
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+/* ── RODAPÉ ── */
+.nf-footer {
+  background: var(--cream);
+  border-top: 1px solid var(--rule);
+  padding: 12px 22px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 28px;
+  position: relative; z-index: 1;
+}
+.nf-footer span {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; color: var(--muted);
+  letter-spacing: 0.08em; line-height: 1.7;
+}
+
+/* ─────────────────────────────────────────
+   PRINT
+───────────────────────────────────────── */
+@media print {
+  body { background: white; padding: 0; }
+  .form-area { display: none !important; }
+  #relatorio {
+    visibility: visible !important;
+    position: static !important;
+    left: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    width: 100% !important;
+  }
+}
